@@ -7,6 +7,14 @@ Automated invoice processing with n8n, Gmail, OpenRouter, and Google Sheets.
 ![OCR.space](https://img.shields.io/badge/OCR.space-OCR-2563EB?style=flat-square)
 ![Google Sheets](https://img.shields.io/badge/Google_Sheets-Storage-34A853?style=flat-square)
 
+## Visual previews
+
+![Illustrative architecture diagram of the invoice-processing workflow](assets/workflow-architecture.svg)
+
+![Illustrative Google Sheets output using synthetic invoice data](assets/sheets-example.svg)
+
+> **Illustrations, not application screenshots.** These images explain the workflow and the expected spreadsheet result; they were derived from the workflow structure and synthetic example data. For authentic screenshots, capture the imported workflow in your own n8n editor and the sample rows in your own Google Sheet, then replace these illustrations. Remove email addresses, credentials, and real invoice data before publishing screenshots.
+
 ## Overview
 
 AI Invoice Automation is an n8n workflow that processes PDF invoices received through Gmail and stores validated invoice data in Google Sheets.
@@ -65,11 +73,29 @@ Extracted records are validated before being written to Google Sheets.
 
 Financial validation includes checking that net amount plus tax matches the total within a configurable tolerance.
 
+## Example output
+
+A successfully processed fictional invoice would create a row similar to this in the `Invoices` tab:
+
+| Invoice Date | Invoice Number | Supplier | Net Amount | Tax Amount | Total Amount | Currency | Processing Status |
+| --- | --- | --- | ---: | ---: | ---: | --- | --- |
+| 2026-11-10 | DEMO-2026-0142 | Nordstern Office Services GmbH | 100.00 | 19.00 | 119.00 | EUR | `RECORDED` |
+
+The complete, 17-column example is available in [`examples/invoices.csv`](examples/invoices.csv). All names, message IDs, and transactions are synthetic; **the rows are illustrative, not evidence of an executed workflow**. A successful run writes to `Invoices`; invalid or duplicate invoices go to `Manual_Review`, with technical/audit events in `Error_Log`. The `Confidence` value is the model's self-assessment, not a calibrated probability.
+
+## Prerequisites
+
+- **n8n:** An n8n Cloud or self-hosted instance with support for the nodes in `workflow.json`, including Gmail Trigger (node version 1.3), Gmail (2.2), Google Sheets (4.7), HTTP Request (4.2), and Code (2). **No minimum or tested n8n application version has been established for this export**; verify node availability and import compatibility on your instance before deployment.
+- **Google account:** Access to a Gmail inbox and a Google Sheets spreadsheet, with permission to authorize both services through OAuth2 in n8n.
+- **OpenRouter account and API key:** Used for PDF parsing and invoice extraction.
+- **OCR.space API key:** Needed for the optional OCR fallback when `ocrEnabled` is `true` (the default in `Config`).
+- **Potential costs:** n8n hosting and third-party AI/OCR requests may incur charges or have usage limits. Check the current pricing and quotas of each service before enabling automatic processing.
+
 ## Setup
 
 ### 1. Import
 
-Import `invoice_automation_english.json` into n8n.
+Import [`workflow.json`](workflow.json) into n8n (Workflow menu → **Import from File**).
 
 ### 2. Connect services
 
@@ -134,6 +160,20 @@ For manual reprocessing, use `Replay - Manual Trigger` with a Gmail API message 
 - Use a database with unique constraints if stronger concurrency guarantees are required.
 
 The workflow includes error handling and manual review paths to prevent incomplete or invalid invoice records from being accepted automatically.
+
+## Repository files
+
+| Path | Purpose |
+| --- | --- |
+| [`workflow.json`](workflow.json) | Importable n8n workflow export |
+| [`examples/invoices.csv`](examples/invoices.csv) | Synthetic example of the complete `Invoices` tab row format |
+| [`assets/workflow-architecture.svg`](assets/workflow-architecture.svg) | Illustrative workflow overview |
+| [`assets/sheets-example.svg`](assets/sheets-example.svg) | Illustrative spreadsheet preview |
+| [`LICENSE`](LICENSE) | MIT License |
+
+## License
+
+MIT — see [`LICENSE`](LICENSE). Review this license before merging if you do not intend to grant reuse and modification rights.
 
 ---
 
