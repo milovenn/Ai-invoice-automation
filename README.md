@@ -1,10 +1,6 @@
 <div align="center">
 
-<img src="./assets/ai-invoice-automation-banner.svg" alt="AI Invoice Automation banner" width="1200">
-
-# AI Invoice Automation
-
-**Process Gmail PDF invoices with n8n and OpenRouter, then record validated fields in Google Sheets.**
+<h1><img src="./assets/ai-invoice-automation-banner.svg" alt="AI Invoice Automation. Process Gmail PDF invoices with n8n and OpenRouter, then record validated fields in Google Sheets." width="1200"></h1>
 
 [![MIT License](https://img.shields.io/badge/License-MIT-6366f1?style=for-the-badge&labelColor=18181b)](./LICENSE)
 [![n8n workflow](https://img.shields.io/badge/n8n-Workflow-6366f1?style=for-the-badge&labelColor=18181b&logo=n8n&logoColor=white)](https://docs.n8n.io/build/manage-workflows/export-and-import/)
@@ -50,7 +46,7 @@ Set the query in **Gmail - New Invoice** to match the messages you want to proce
 
 ## 🏗️ Architecture
 
-![Invoice processing flow with Gmail intake, OpenRouter extraction, validation, OCR fallback and Google Sheets outputs](./assets/workflow-architecture.svg)
+[![n8n workflow editor showing Gmail intake, OpenRouter extraction, validation, OCR fallback, and Google Sheets outputs](./assets/workflow.png)](./assets/workflow.png)
 
 The attachment check uses the Gmail message ID and attachment identifier. The business duplicate key combines the normalized supplier, invoice number, invoice date, and currency. Google Sheets has no atomic uniqueness check for concurrent executions.
 
